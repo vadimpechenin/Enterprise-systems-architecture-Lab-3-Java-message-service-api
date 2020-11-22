@@ -1,4 +1,6 @@
 package com.example.wokers_machines_l2.entitymessages;
+import lombok.Data;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -6,6 +8,7 @@ import javax.persistence.Id;
 import java.util.Date;
 // Сущность для таблицы с информацией об изменениях
 @Entity
+@Data
 public class Message {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
