@@ -9,16 +9,16 @@ import java.util.Objects;
 @Entity
 @Table(schema = "public", name = "worker")
 public class Worker {
-    private int personnelNumber;
+    private Integer personnelNumber;
     private String fullName;
-    private int category;
+    private Integer category;
     private Machine machine;
     public Worker() {
     }
 
     @Id
     @Column(name = "personnel_number", nullable = false)
-    public int getPersonnelNumber() {
+    public Integer getPersonnelNumber() {
         return personnelNumber;
     }
 
@@ -36,20 +36,9 @@ public class Worker {
     }
 
     @Column(name = "category", nullable = false)
-    public int getCategory() { return category; }
+    public Integer getCategory() { return category; }
 
     public void setCategory(int category) { this.category = category; }
-
-    @ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = {CascadeType.ALL})
-    @JoinColumn(name = "mashine_id")
-
-    public Machine getMachine() {
-        return machine;
-    }
-
-    public void setMachine(Machine machine) {
-        this.machine = machine;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -60,5 +49,17 @@ public class Worker {
                 Objects.equals(fullName, worker.fullName) &&
                 category == worker.category;
     }
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "mashine_id")
+
+    public Machine getMachine() {
+        return machine;
+    }
+
+    public void setMachine(Machine machine) {
+        this.machine = machine;
+    }
+
 
 }
