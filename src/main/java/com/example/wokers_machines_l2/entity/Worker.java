@@ -1,14 +1,16 @@
 package com.example.wokers_machines_l2.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+//import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
 @Table(schema = "public", name = "worker")
-public class Worker {
+public class Worker implements EntityInterface{
     private Integer personnelNumber;
     private String fullName;
     private Integer category;
@@ -18,11 +20,12 @@ public class Worker {
 
     @Id
     @Column(name = "personnel_number", nullable = false)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     public Integer getPersonnelNumber() {
         return personnelNumber;
     }
 
-    public void setPersonnelNumber(int personnelNumber) {
+    public void setPersonnelNumber(Integer personnelNumber) {
         this.personnelNumber = personnelNumber;
     }
 
@@ -38,7 +41,9 @@ public class Worker {
     @Column(name = "category", nullable = false)
     public Integer getCategory() { return category; }
 
-    public void setCategory(int category) { this.category = category; }
+    public void setCategory(Integer category) {
+        this.category = category;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -47,12 +52,11 @@ public class Worker {
         Worker worker = (Worker) o;
         return personnelNumber == worker.personnelNumber &&
                 Objects.equals(fullName, worker.fullName) &&
-                category == worker.category;
+                category.equals(worker.category);
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "mashine_id")
-
     public Machine getMachine() {
         return machine;
     }
@@ -61,5 +65,21 @@ public class Worker {
         this.machine = machine;
     }
 
+    @Transient
+    @JsonIgnore
+    public Map<String, String> getFieldsMap() {
+        Map<String, String> map = new HashMap<>();
+        map.put("personnelNumber", personnelNumber.toString());
+        map.put("fullName", fullName);
+        map.put("category", category.toString());
+        map.put("machineId", machine.getId().toString());
+        return map;
+    }
+
+    @Transient
+    @JsonIgnore
+    public Integer getIdentifier() {
+        return getPersonnelNumber();
+    }
 
 }

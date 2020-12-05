@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/RESTapi/workers/")
-public class WorkersApiController extends XmlController{
+public class WorkersApiController extends XmlAndMailController {
 
     @Autowired
     WorkerRepository workerRepository;
@@ -61,6 +61,7 @@ public class WorkersApiController extends XmlController{
     @ResponseBody
     public Worker addWorkerXml(@RequestBody Worker worker) {
         Worker created = workerRepository.save(worker);
+        sendCreateMessage(created);
         return created;
     }
 
@@ -75,6 +76,7 @@ public class WorkersApiController extends XmlController{
         worker.setCategory(workerDetails.getCategory());
         worker.setMachine(workerDetails.getMachine());
 
+        sendUpdateMessage(worker);
         return ResponseEntity.ok(workerRepository.save(worker));
     }
 
@@ -87,6 +89,7 @@ public class WorkersApiController extends XmlController{
                 .orElseThrow(() -> new NotFoundException("Рабочий не находится по этому idd :: " + personnelNumber));
 
         workerRepository.delete(worker);
+        sendDeleteMessage(worker);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
 
@@ -116,8 +119,9 @@ public class WorkersApiController extends XmlController{
     @PostMapping
     @ResponseBody
     public Worker addWorker(@RequestBody Worker worker) {
-
-        return workerRepository.save(worker);
+        Worker created = workerRepository.save(worker);
+        //sendCreateMessage(created);
+        return created;
     }
 
     // Обновить запись
@@ -131,6 +135,7 @@ public class WorkersApiController extends XmlController{
         worker.setCategory(workerDetails.getCategory());
         worker.setMachine(workerDetails.getMachine());
 
+        //sendUpdateMessage(worker);
         return ResponseEntity.ok(workerRepository.save(worker));
     }
 
@@ -143,6 +148,7 @@ public class WorkersApiController extends XmlController{
                 .orElseThrow(() -> new NotFoundException("Рабочий не находится по этому idd :: " + personnelNumber));
 
         workerRepository.delete(worker);
+        //sendDeleteMessage(worker);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
 

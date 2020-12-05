@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
 @Table(schema = "public", name = "machine")
-public class Machine {
+public class Machine implements EntityInterface {
     private Integer id;
     private String type;
     private List<Worker> workers;
@@ -19,6 +21,7 @@ public class Machine {
 
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     public Integer getId() {
         return id;
     }
@@ -52,7 +55,7 @@ public class Machine {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Machine machine = (Machine) o;
-        return id == machine.id &&
+        return id.equals(machine.id) &&
                 Objects.equals(type, machine.type);
     }
 
@@ -61,6 +64,20 @@ public class Machine {
         return Objects.hash(id, type);
     }
 
+    @Transient
+    @JsonIgnore
+    public Map<String, String> getFieldsMap() {
+        Map<String, String> map = new HashMap<>();
+        map.put("id", id.toString());
+        map.put("type", type);
+        return map;
+    }
+
+    @Transient
+    @JsonIgnore
+    public Integer getIdentifier() {
+        return getId();
+    }
 
 
 }

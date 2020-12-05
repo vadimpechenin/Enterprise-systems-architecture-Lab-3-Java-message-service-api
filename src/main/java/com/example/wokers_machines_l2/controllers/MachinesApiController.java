@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/RESTapi/machines/")
-public class MachinesApiController extends XmlController {
+public class MachinesApiController extends XmlAndMailController {
     @Autowired // его средства для получения bean-компонента под названием user Repository, который автоматически
     // создается Spring, мы будем использовать его для обработки данных
     MachineRepository machineRepository;
@@ -49,8 +49,9 @@ public class MachinesApiController extends XmlController {
     @PostMapping("xml")
     @ResponseBody
     public Machine addMachineXml(@RequestBody Machine machine) {
-
-        return machineRepository.save(machine);
+        Machine created = machineRepository.save(machine);
+        sendCreateMessage(created);
+        return created;
     }
 
     // Обновить запись
@@ -61,6 +62,7 @@ public class MachinesApiController extends XmlController {
         Machine machine = machineRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Станок не находится по этому id :: " + id));
         machine.setType(machineDetails.getType());
+        sendUpdateMessage(machine);
 
         return ResponseEntity.ok(machineRepository.save(machine));
     }
@@ -82,6 +84,7 @@ public class MachinesApiController extends XmlController {
         });
 
         machineRepository.delete(machine);
+        sendDeleteMessage(machine);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
 
@@ -114,7 +117,10 @@ public class MachinesApiController extends XmlController {
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Machine addMachine(@RequestBody Machine machine) {
-        return machineRepository.save(machine);
+        Machine created = machineRepository.save(machine);
+        // Отправка сообщения о создании
+        //sendCreateMessage(machine);
+        return created;
     }
 
     // Обновить запись
@@ -126,7 +132,8 @@ public class MachinesApiController extends XmlController {
         Machine machine = machineRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Станок не находится по этому id :: " + id));
         machine.setType(machineDetails.getType());
-
+        // Отправка сообщения об изменении
+        //sendUpdateMessage(machine);
         return ResponseEntity.ok(machineRepository.save(machine));
     }
 
@@ -147,6 +154,8 @@ public class MachinesApiController extends XmlController {
             }
         });
         machineRepository.delete(machine);
+        // Отправка сообщения об удалении
+        //sendDeleteMessage(machine);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
 

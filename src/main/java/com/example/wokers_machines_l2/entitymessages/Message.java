@@ -1,6 +1,8 @@
 package com.example.wokers_machines_l2.entitymessages;
 import lombok.Data;
+import org.apache.activemq.command.MessageAck;
 
+import javax.annotation.Nullable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,94 +16,31 @@ public class Message {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
-    private String changeType ;
+    private ChangeType changeType ;
 
     private String entity;
 
-    private Long idEntity;
+    private Integer idEntity;
 
     private String fieldName;
 
     private String fieldNewValue;
 
-    private Date updateDate;
+    private Date created;
 
-    private String emailСharacter;
+    private String email;
 
     public Message() {
     }
 
-    public Message(String changeType, String entity, Long idEntity, String fieldName, String fieldNewValue, Date updateDate, String emailСharacter) {
+    public Message(ChangeType changeType, String entity, Integer idEntity, String fieldName, String fieldNewValue, Date created, String email) {
         this.changeType = changeType;
         this.entity = entity;
         this.idEntity = idEntity;
         this.fieldName = fieldName;
         this.fieldNewValue = fieldNewValue;
-        this.updateDate = updateDate;
-        this.emailСharacter = emailСharacter;
+        this.created = created;
+        this.email = email;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getChangeType() {
-        return changeType;
-    }
-
-    public String getEntity() {
-        return entity;
-    }
-
-    public Long getIdEntity() {
-        return idEntity;
-    }
-
-    public String getFieldName() {
-        return fieldName;
-    }
-
-    public String getFieldNewValue() {
-        return fieldNewValue;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public String getEmailСharacter() {
-        return emailСharacter;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setChangeType(String changeType) {
-        this.changeType = changeType;
-    }
-
-    public void setEntity(String entity) {
-        this.entity = entity;
-    }
-
-    public void setIdEntity(Long idEntity) {
-        this.idEntity = idEntity;
-    }
-
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
-    }
-
-    public void setFieldNewValue(String fieldNewValue) {
-        this.fieldNewValue = fieldNewValue;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public void setEmailСharacter(String emailСharacter) {
-        this.emailСharacter = emailСharacter;
-    }
 }
